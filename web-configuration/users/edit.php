@@ -18,7 +18,7 @@ if(isset($_POST['update']))
       $result = mysqli_query($mysqli, "UPDATE users SET name='$name',email='$email',birthday='$birthday' WHERE user_id=$user_id");
 
       echo 'Save done, redirecting..';
-      //redirectig to the display page. In our case, it is index.php
+      //redirecting to the display page. In our case, it is index.php
       header("Location: index.php");
     }
 }

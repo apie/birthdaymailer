@@ -40,12 +40,12 @@ if(isset($_POST['submit'])) {
         //insert data to database
         $result = mysqli_query($mysqli, "INSERT INTO users(config_id,name,email,birthday) VALUES(1,'$name','$email','".date_format($birthday, 'Y-m-d')."')");
 				if($result){
-								//display success message
-								echo "<font color='green'>Data added successfully.";
-								echo "<br/><a href='index.php'>View Result</a>";
+            //display success message
+            echo "<font color='green'>Data added successfully.";
+            echo "<br/><a href='index.php'>View Result</a>";
 				} else {
-								echo "<font color='red'>Error while adding data (duplicate user?).";
-								echo "<br/><a href='index.php'>Back to overview</a>";
+            echo "<font color='red'>Error while adding data (duplicate user?).";
+            echo "<br/><a href='index.php'>Back to overview</a>";
         }
     }
 }
