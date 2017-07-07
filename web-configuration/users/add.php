@@ -9,6 +9,7 @@
 include_once("../conf/config.php");
 if(isset($_POST['submit'])) {
 
+    $config_id = mysqli_real_escape_string($mysqli, $_POST['config_id']);
     $name = mysqli_real_escape_string($mysqli, $_POST['name']);
     $email = mysqli_real_escape_string($mysqli, $_POST['email']);
     $birthday = mysqli_real_escape_string($mysqli, $_POST['birthday']);
@@ -20,7 +21,10 @@ if(isset($_POST['submit'])) {
     //echo date_format($birthday, 'Y-m-d');
 
     // checking empty fields
-    if(empty($name) || $emptybday || !($birthday_valid) || empty($email)) {
+    if(empty($config_id) || empty($name) || $emptybday || !($birthday_valid) || empty($email)) {
+        if(empty($config_id)) {
+            echo "<font color='red'>config_id field is empty.</font><br/>";
+        }
         if(empty($name)) {
             echo "<font color='red'>Name field is empty.</font><br/>";
         }
@@ -38,17 +42,56 @@ if(isset($_POST['submit'])) {
     } else {
         // if all the fields are filled (not empty)
         //insert data to database
-        $result = mysqli_query($mysqli, "INSERT INTO users(config_id,name,email,birthday) VALUES(1,'$name','$email','".date_format($birthday, 'Y-m-d')."')");
+        $result = mysqli_query($mysqli, "INSERT INTO users(config_id,name,email,birthday) VALUES('$config_id','$name','$email','".date_format($birthday, 'Y-m-d')."')");
 				if($result){
             //display success message
             echo "<font color='green'>Data added successfully.";
-            echo "<br/><a href='index.php'>View Result</a>";
+            echo "<br/><a href='index.php?config_id=".$config_id."'>View Result</a>";
 				} else {
             echo "<font color='red'>Error while adding data (duplicate user?).";
             echo "<br/><a href='index.php'>Back to overview</a>";
         }
     }
 }
+else
+{
+$config_id = 1;
+if (isset($_GET['config_id'])) $config_id = mysqli_real_escape_string($mysqli, $_GET['config_id']);
 ?>
+<html>
+<head>
+    <title>Add Data</title>
+</head>
+
+<body>
+    <a href="index.php">Home</a>
+    <br/><br/>
+
+    <form action="add.php" method="post" name="form1">
+        <table width="40%" border="0">
+            <tr>
+                <td>Name (e.g. John Doe)</td>
+                <td><input type="text" name="name"></td>
+            </tr>
+            <tr>
+                <td>Email (e.g. john@example.com)</td>
+                <td><input type="email" name="email"></td>
+            </tr>
+            <tr>
+                <td>Birthday (e.g. 1980-01-31)</td>
+                <td><input type="date" name="birthday" min="1900-01-01"></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td><input type="hidden" name="config_id" value=<?php echo $config_id;?>></td>
+                <td><input type="submit" name="submit" value="Add"></td>
+            </tr>
+        </table>
+    </form>
 </body>
 </html>
+</body>
+</html>
+<?php
+}
+?>
