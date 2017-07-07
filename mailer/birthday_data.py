@@ -1,14 +1,26 @@
 #!/usr/bin/env python2
 # By D.J. Murray (apie), 2016-10-27
-import MySQLdb
+try:
+  import MySQLdb
+  useConnector = False
+except ImportError:
+  import mysql.connector
+  useConnector = True
+
 import datetime
 import birthday_settings
 
 def connect_birthday():
-    db = MySQLdb.connect(host=   birthday_settings.birthday_host,
+    if useConnector:
+      db = mysql.connector.connect(host=   birthday_settings.birthday_host,
                          user=   birthday_settings.birthday_user,
                          passwd= birthday_settings.birthday_passwd,
                          db=     birthday_settings.birthday_db)
+    else:
+      db = MySQLdb.connect(host=   birthday_settings.birthday_host,
+                          user=   birthday_settings.birthday_user,
+                          passwd= birthday_settings.birthday_passwd,
+                          db=     birthday_settings.birthday_db)
     return db
 
 def birthday_getconfiguration(config_id):
