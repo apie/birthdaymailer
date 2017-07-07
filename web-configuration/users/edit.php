@@ -16,19 +16,22 @@ if(isset($_POST['update']))
     } else {
       //updating the table
       $result = mysqli_query($mysqli, "UPDATE users SET name='$name',email='$email',birthday='$birthday' WHERE user_id=$user_id");
-
+      $result = mysqli_query($mysqli, "SELECT config_id FROM users WHERE user_id=$user_id");
+      while($res = mysqli_fetch_array($result))
+      {
+        $config_id = $res['config_id'];
+      }
       echo 'Save done, redirecting..';
       //redirecting to the display page. In our case, it is index.php
-      header("Location: index.php");
+      header("Location: index.php?config_id=".$config_id."");
     }
 }
 ?>
 <?php
 //getting user_id from url
-$user_id = mysqli_real_escape_string($mysqli, $_POST['user_id']);
-
+$user_id = mysqli_real_escape_string($mysqli, $_GET['user_id']);
 //selecting data associated with this particular user_id
-$result = mysqli_query($mysqli, "SELECT * FROM users WHERE user_id=$user_id");
+$result = mysqli_query($mysqli, "SELECT name,email,birthday FROM users WHERE user_id=$user_id");
 
 while($res = mysqli_fetch_array($result))
 {

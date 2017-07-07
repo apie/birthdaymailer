@@ -4,7 +4,7 @@ include_once("../conf/config.php");
 
 if(isset($_POST['update']))
 {
-//fixme for now use fixed config id    $config_id = mysqli_real_escape_string($mysqli, $_POST['config_id']);
+    $config_id = mysqli_real_escape_string($mysqli, $_POST['config_id']);
     $config_name=mysqli_real_escape_string($mysqli, $_POST['config_name']);
     $from_name=mysqli_real_escape_string($mysqli, $_POST['from_name']);
     $from_address=mysqli_real_escape_string($mysqli, $_POST['from_address']);
@@ -16,24 +16,24 @@ if(isset($_POST['update']))
     $picture_file=mysqli_real_escape_string($mysqli, $_POST['picture_file']);
 
     // checking empty fields
-    if(empty($config_name) || empty($from_name) || empty($from_address) || empty($bcc_address) || empty($topic) || empty($line1) || empty($age_line) || empty($noage_line) || empty($picture_file) ) {
-		  echo "<font color='red'>No empty fields allowed.</font><br/>";
+    if(empty($config_id) || empty($config_name) || empty($from_name) || empty($from_address) || empty($bcc_address) || empty($topic) || empty($line1) || empty($age_line) || empty($noage_line) || empty($picture_file) ) {
+        echo "<font color='red'>No empty fields allowed.</font><br/>";
     } else {
         //updating the table
-        $result = mysqli_query($mysqli, "UPDATE config SET config_name='$config_name',from_name='$from_name',from_address='$from_address',bcc_address='$bcc_address',topic='$topic',line1='$line1',age_line='$age_line',noage_line='$noage_line',picture_file='$picture_file' WHERE config_id=$c_config_id");
+        $result = mysqli_query($mysqli, "UPDATE config SET config_name='$config_name',from_name='$from_name',from_address='$from_address',bcc_address='$bcc_address',topic='$topic',line1='$line1',age_line='$age_line',noage_line='$noage_line',picture_file='$picture_file' WHERE config_id=$config_id");
 
 				echo 'Save done, redirecting..';
-        //redirectig to the display page. In our case, it is index.php
+        //redirecting to the display page. In our case, it is index.php
         header("Location: index.php");
     }
 }
 ?>
 <?php
-//getting config_id from url
-//$config_id = $_GET['config_id'];
+$config_id = 1;
+if (isset($_GET['config_id'])) $config_id = mysqli_real_escape_string($mysqli, $_GET['config_id']);
 
 //selecting data associated with this particular config_id
-$result = mysqli_query($mysqli, "SELECT config_id,config_name,from_name,from_address,bcc_address,topic,line1,age_line,noage_line,picture_file FROM config WHERE config_id=$c_config_id");
+$result = mysqli_query($mysqli, "SELECT config_id,config_name,from_name,from_address,bcc_address,topic,line1,age_line,noage_line,picture_file FROM config WHERE config_id=$config_id");
 
 while($res = mysqli_fetch_array($result))
 {
@@ -96,7 +96,7 @@ while($res = mysqli_fetch_array($result))
                 <td><input size=80 type="text" name="picture_file" value="<?php echo $picture_file;?>"></td>
             </tr>
             <tr>
-                <td><input type="hidden" name="config_id" value=<?php echo $c_config_id;?>></td>
+                <td><input type="hidden" name="config_id" value=<?php echo $config_id;?>></td>
                 <td><input type="submit" name="update" value="Update"></td>
             </tr>
         </table>

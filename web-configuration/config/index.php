@@ -13,7 +13,7 @@ if (isset($_GET['sort'])) $sort = mysqli_real_escape_string($mysqli, $_GET['sort
 $order = 'ASC';
 if (isset($_GET['order'])) $order = mysqli_real_escape_string($mysqli, $_GET['order']);
 
-$result = mysqli_query($mysqli, "SELECT config_id,config_name,from_name,from_address,bcc_address,topic,line1,age_line,noage_line,picture_file FROM config WHERE config_id=$c_config_id ORDER BY $sort $order ");
+$result = mysqli_query($mysqli, "SELECT config_id,config_name,from_name,from_address,bcc_address,topic,line1,age_line,noage_line,picture_file FROM config ORDER BY $sort $order ");
 mysqli_close($mysqli);
 $order = switchorder($order);
 ?>
@@ -27,11 +27,7 @@ $order = switchorder($order);
 <body>
     <h1>Birthday mailer - e-mail message configuration</h1>
 	  <br/>
-<!--
     <a href="add.html">Add new message configuration</a><br/><br/>
-todo
--->
-
     <table width='80%' border=0>
         <tr bgcolor='#CCCCCC'>
             <td><a href="?sort=config_name&order=<?php echo $order;  ?>">config_name</a></td>
@@ -57,8 +53,10 @@ todo
             echo "<td>".$res['age_line']."</td>";
             echo "<td>".$res['noage_line']."</td>";
             echo "<td>".$res['picture_file']."</td>";
-            echo "<td><a href=\"edit.php?config_id=$res[config_id]\">Edit</a></td>";
-//| <a href=\"delete.php?config_id=$res[config_id]\" onClick=\"return confirm('Are you sure you want to delete?')\">Delete</a> TODO
+            echo "<td><a href=\"edit.php?config_id=$res[config_id]\">Edit</a>";
+            echo "| <a href=\"delete.php?config_id=$res[config_id]\" onClick=\"return confirm('Are you sure you want to delete?')\">Delete</a>";
+            echo "</td>";
+            echo "</tr>";
         }
         ?>
     </table>
