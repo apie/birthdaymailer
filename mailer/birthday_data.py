@@ -9,10 +9,10 @@ import datetime
 import birthday_settings
 
 def connect_birthday():
-    db = mysql_connect(host=   birthday_settings.birthday_host,
-                        user=   birthday_settings.birthday_user,
-                        passwd= birthday_settings.birthday_passwd,
-                        db=     birthday_settings.birthday_db)
+    db = mysql_connect(host   = birthday_settings.birthday_host,
+                       user   = birthday_settings.birthday_user,
+                       passwd = birthday_settings.birthday_passwd,
+                       db     = birthday_settings.birthday_db)
     return db
 
 def birthday_getconfiguration(config_id):
