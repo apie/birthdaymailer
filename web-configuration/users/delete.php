@@ -8,14 +8,24 @@ if (isset($_GET['user_id']))
 {
   $user_id = mysqli_real_escape_string($mysqli, $_GET['user_id']);
 
+  $result = mysqli_query($mysqli, "SELECT config_id FROM users WHERE user_id=$user_id");
+  while($res = mysqli_fetch_array($result))
+  {
+    $config_id = $res['config_id'];
+  }
+
   //deleting the row from table
   $result = mysqli_query($mysqli, "DELETE FROM users WHERE user_id='$user_id'");
   mysqli_close($mysqli);
   if($result)
   {
-          //redirecting to the display page (index.php in our case)
-          header("Location:index.php");
+    mysqli_free_result($result);
+    mysqli_close($mysqli);
+    //redirecting to the display page (index.php in our case)
+    header("Location: index.php?config_id=".$config_id."");
   }
-  else {print_r(mysqli_error_list($mysqli));}
+  else {print_r(
+    mysqli_close($mysqli);
+  }
 }
 ?>
