@@ -54,7 +54,7 @@ $order = switchorder($order);
             echo "<td>".$res['noage_line']."</td>";
             echo "<td>".$res['picture_file']."</td>";
             echo "<td><a href=\"edit.php?config_id=$res[config_id]\">Edit</a>";
-            echo "| <a href=\"delete.php?config_id=$res[config_id]\" onClick=\"return confirm('Are you sure you want to delete?')\">Delete</a>";
+            echo "| <a href=\"delete.php?config_id=$res[config_id]\" onClick=\"return confirm('Are you sure you want to delete ".$res['config_name']."?')\">Delete</a>";
             echo "</td>";
             echo "</tr>";
         }
