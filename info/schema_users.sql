@@ -8,3 +8,5 @@ CREATE TABLE IF NOT EXISTS `users` (
   UNIQUE KEY `i` (`user_id`,`name`,`email`,`birthday`,`config_id`),
   KEY `c` (`config_id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=9 ;
+ALTER TABLE `users`
+  ADD CONSTRAINT `users_ibfk_1` FOREIGN KEY (`config_id`) REFERENCES `config` (`config_id`);
