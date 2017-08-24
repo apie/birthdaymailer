@@ -1,26 +1,18 @@
 #!/usr/bin/env python2
 # By D.J. Murray (apie), 2016-10-27
 try:
-  import MySQLdb
-  useConnector = False
+  from MySQLdb import connect as mysql_connect
 except ImportError:
-  import mysql.connector
-  useConnector = True
+  from mysql.connector import connect as mysql_connect
 
 import datetime
 import birthday_settings
 
 def connect_birthday():
-    if useConnector:
-      db = mysql.connector.connect(host=   birthday_settings.birthday_host,
-                         user=   birthday_settings.birthday_user,
-                         passwd= birthday_settings.birthday_passwd,
-                         db=     birthday_settings.birthday_db)
-    else:
-      db = MySQLdb.connect(host=   birthday_settings.birthday_host,
-                          user=   birthday_settings.birthday_user,
-                          passwd= birthday_settings.birthday_passwd,
-                          db=     birthday_settings.birthday_db)
+    db = mysql_connect(host=   birthday_settings.birthday_host,
+                        user=   birthday_settings.birthday_user,
+                        passwd= birthday_settings.birthday_passwd,
+                        db=     birthday_settings.birthday_db)
     return db
 
 def birthday_getconfiguration(config_id):
