@@ -64,7 +64,7 @@ $order = switchorder($order);
             echo "<td>".$res['birthday']."</td>";
             echo "<td>".$res['birthdaymonth']."</td>";
             echo "<td>".$res['age']."</td>";
-            echo "<td><a href=\"edit.php?user_id=$res[user_id]\">Edit</a> | <a href=\"delete.php?user_id=$res[user_id]\" onClick=\"return confirm('Are you sure you want to delete ".$res['name']."?')\">Delete</a></td>";
+            echo "<td><a href=\"edit.php?user_id=$res[user_id]\">Edit</a> | <form id=\"deleteForm\" action=\"delete.php\" method=\"post\"> <input type=\"hidden\" name=\"user_id\" value=$res[user_id]> <a href=\"#\" onClick=\"confirm('Are you sure you want to delete ".$res['name']."?')?document.getElementById('deleteForm').submit():null\">Delete</a></form></td>";
         }
         ?>
     </table>

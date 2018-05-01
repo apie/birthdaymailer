@@ -2,11 +2,10 @@
 
 //including the database connection file
 include("../conf/config.php");
-
-//getting user_id of the data from url
-if (isset($_GET['user_id']))
+//getting user_id of the data from POST
+if (isset($_POST['user_id']))
 {
-  $user_id = mysqli_real_escape_string($mysqli, $_GET['user_id']);
+  $user_id = mysqli_real_escape_string($mysqli, $_POST['user_id']);
 
   $result = mysqli_query($mysqli, "SELECT config_id FROM users WHERE user_id=$user_id");
   while($res = mysqli_fetch_array($result))
@@ -25,7 +24,8 @@ if (isset($_GET['user_id']))
     header("Location: index.php?config_id=".$config_id."");
   }
   else {print_r(
-    mysqli_close($mysqli);
+    mysqli_close($mysqli)
+    );
   }
 }
 ?>
