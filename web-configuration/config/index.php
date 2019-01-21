@@ -8,13 +8,13 @@ function switchorder($order){
 //including the database connection file
 include_once("../conf/config.php");
 
+//TODO escape strings! sqlite_escape_string() not working!
 $sort = 'config_name';
-if (isset($_GET['sort'])) $sort = mysqli_real_escape_string($mysqli, $_GET['sort']);
+if (isset($_GET['sort'])) $sort = $_GET['sort'];
 $order = 'ASC';
-if (isset($_GET['order'])) $order = mysqli_real_escape_string($mysqli, $_GET['order']);
+if (isset($_GET['order'])) $order = $_GET['order'];
 
-$result = mysqli_query($mysqli, "SELECT config_id,config_name,from_name,from_address,bcc_address,topic,line1,age_line,noage_line,picture_file FROM config ORDER BY $sort $order ");
-mysqli_close($mysqli);
+$result = $db->query("SELECT config_id,config_name,from_name,from_address,bcc_address,topic,line1,age_line,noage_line,picture_file FROM config ORDER BY {$sort} {$order} ");
 $order = switchorder($order);
 ?>
 
@@ -42,7 +42,7 @@ $order = switchorder($order);
             <td>Update</td>
         </tr>
         <?php
-        while($res = mysqli_fetch_array($result)) {
+        while($res = $result->fetchArray(SQLITE3_ASSOC)) {
             echo "<tr>";
             echo "<td>".$res['config_name']."</td>";
             echo "<td>".$res['from_name']."</td>";
@@ -62,3 +62,6 @@ $order = switchorder($order);
     </table>
 </body>
 </html>
+<?php
+  $db->close();
+?>

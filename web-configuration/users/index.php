@@ -9,17 +9,14 @@ function switchorder($order){
 include_once("../conf/config.php");
 
 $sort = 'name';
-if (isset($_GET['sort'])) $sort = mysqli_real_escape_string($mysqli, $_GET['sort']);
+if (isset($_GET['sort'])) $sort = $_GET['sort'];
 $order = 'ASC';
-if (isset($_GET['order'])) $order = mysqli_real_escape_string($mysqli, $_GET['order']);
+if (isset($_GET['order'])) $order = $_GET['order'];
 
 $config_id1 = 1;
-if (isset($_GET['config_id'])) $config_id1 = mysqli_real_escape_string($mysqli, $_GET['config_id']);
+if (isset($_GET['config_id'])) $config_id1 = $_GET['config_id'];
 
-$configs_result = mysqli_query($mysqli, "SELECT config_id,config_name FROM config ORDER BY config_name ASC");
-$result = mysqli_query($mysqli, "SELECT user_id,name,email,birthday,DATE_FORMAT( birthday, '%m-%d' ) as birthdaymonth, TIMESTAMPDIFF(YEAR, birthday, CURDATE()) as age
- FROM users WHERE config_id=$config_id1 ORDER BY $sort $order ");
-mysqli_close($mysqli);
+$configs_result = $db->query("SELECT config_id,config_name FROM config ORDER BY config_name ASC");
 $order = switchorder($order);
 ?>
 
@@ -35,7 +32,7 @@ $order = switchorder($order);
     <form action=".">
       <select name="config_id" onchange="this.form.submit()">
         <?php
-        while($configres = mysqli_fetch_array($configs_result)) {
+        while($configres = $configs_result->fetchArray(SQLITE3_ASSOC)) {
           echo "<option value=\"".$configres['config_id']."\"";
           echo ($configres['config_id']==$config_id1 ? " selected" : "");
           echo ">".$configres['config_name'];
@@ -57,7 +54,8 @@ $order = switchorder($order);
           <td>Update</td>
         </tr>
         <?php
-        while($res = mysqli_fetch_array($result)) {
+        $result = $db->query("SELECT user_id,name,email,birthday,strftime('%m-%d', birthday) as birthdaymonth, current_date - birthday as age FROM users WHERE config_id=$config_id1 ORDER BY $sort $order ");
+        while($res = $result->fetchArray(SQLITE3_ASSOC)) {
             echo "<tr>";
             echo "<td>".$res['name']."</td>";
             echo "<td>".$res['email']."</td>";
@@ -66,6 +64,7 @@ $order = switchorder($order);
             echo "<td>".$res['age']."</td>";
             echo "<td><a href=\"edit.php?user_id=$res[user_id]\">Edit</a> | <form id=\"deleteForm\" action=\"delete.php\" method=\"post\"> <input type=\"hidden\" name=\"user_id\" value=$res[user_id]> <a href=\"#\" onClick=\"confirm('Are you sure you want to delete ".$res['name']."?')?document.getElementById('deleteForm').submit():null\">Delete</a></form></td>";
         }
+        $db->close();
         ?>
     </table>
 </body>

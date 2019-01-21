@@ -1,19 +1,16 @@
 #!/usr/bin/env python2
 # By D.J. Murray (apie), 2016-10-27
-try:
-  from MySQLdb import connect as mysql_connect
-except ImportError:
-  from mysql.connector import connect as mysql_connect
+import sqlite3 as lite
 
+import os
 import datetime
 import birthday_settings
 
+SCRIPT_DIR = os.path.dirname(os.path.realpath(__file__))
+
+
 def connect_birthday():
-    db = mysql_connect(host   = birthday_settings.birthday_host,
-                       user   = birthday_settings.birthday_user,
-                       passwd = birthday_settings.birthday_passwd,
-                       db     = birthday_settings.birthday_db)
-    return db
+    return lite.connect(os.path.join(SCRIPT_DIR, birthday_settings.birthday_db))
 
 def birthday_getconfiguration(config_id):
     db = connect_birthday()
@@ -46,23 +43,21 @@ def birthday_getconfiguration(config_id):
     return configuration
 
 def birthday_getbirthdays(config_id):
-    today = datetime.date.isoformat(datetime.date.today())
-
     db = connect_birthday()
-    # you must create a Cursor object. It will let
-    #  you execute all the queries you need
     cur = db.cursor()
 
     # Use all the SQL you like
-    query="SELECT name, email, birthday, CURDATE() as curdate "\
+    query="SELECT name, email, birthday, DATE('now') as curdate "\
     "FROM users "\
-    "WHERE config_id = '%d' "\
-    "AND EXTRACT(MONTH FROM birthday)=EXTRACT(MONTH FROM CURDATE()) AND EXTRACT(DAY FROM birthday)=EXTRACT(DAY FROM CURDATE())" % (config_id)
+    "WHERE config_id = '{}' "\
+    "AND strftime('%m', birthday)=strftime('%m', curdate) AND strftime('%d', birthday)=strftime('%d', curdate)".format(config_id)
     cur.execute(query)
 
     birthdays = []
-    for name,email,birthday,curdate in cur.fetchall():
-        age = ((curdate.year-birthday.year))
+    for name, email, birthday_str, curdate_str in cur.fetchall():
+        birthday = datetime.datetime.strptime(birthday_str, '%Y-%m-%d')
+        curdate = datetime.datetime.strptime(curdate_str, '%Y-%m-%d')
+        age = (curdate.year-birthday.year)
         user = {}
         user['name']     = name
         user['email']    = email

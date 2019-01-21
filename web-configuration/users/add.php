@@ -8,11 +8,10 @@
 //including the database connection file
 include_once("../conf/config.php");
 if(isset($_POST['submit'])) {
-
-    $config_id = mysqli_real_escape_string($mysqli, $_POST['config_id']);
-    $name = mysqli_real_escape_string($mysqli, $_POST['name']);
-    $email = mysqli_real_escape_string($mysqli, $_POST['email']);
-    $birthday = mysqli_real_escape_string($mysqli, $_POST['birthday']);
+    $config_id = $_POST['config_id'];
+    $name = $_POST['name'];
+    $email = $_POST['email'];
+    $birthday = $_POST['birthday'];
     $emptybday = empty($birthday);
     $birthday = date_create_from_format('Y-m-d', $birthday);
     $birthday_valid = false;
@@ -42,7 +41,7 @@ if(isset($_POST['submit'])) {
     } else {
         // if all the fields are filled (not empty)
         //insert data to database
-        $result = mysqli_query($mysqli, "INSERT INTO users(config_id,name,email,birthday) VALUES('$config_id','$name','$email','".date_format($birthday, 'Y-m-d')."')");
+        $result = $db->exec("INSERT INTO users(config_id,name,email,birthday) VALUES('$config_id','$name','$email','".date_format($birthday, 'Y-m-d')."')");
 				if($result){
             //display success message
             echo "<font color='green'>Data added successfully.";
@@ -51,12 +50,13 @@ if(isset($_POST['submit'])) {
             echo "<font color='red'>Error while adding data (duplicate user?).";
             echo "<br/><a href='index.php'>Back to overview</a>";
         }
+        $db->close();
     }
 }
 else
 {
 $config_id = 1;
-if (isset($_GET['config_id'])) $config_id = mysqli_real_escape_string($mysqli, $_GET['config_id']);
+if (isset($_GET['config_id'])) $config_id = $_GET['config_id'];
 ?>
 <html>
 <head>

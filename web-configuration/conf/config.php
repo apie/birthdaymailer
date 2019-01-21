@@ -1,13 +1,15 @@
-<!-- By D.J. Murray (apie), 2016-10-27 -->
 <?php
-// connect to db
-$host='';
-$user='';
-$passwd='';
-$db='';
-$mysqli = mysqli_connect($host, $user, $passwd, $db);
-if (!$mysqli) {
-    die('Not connected : ' . mysql_error());
+
+
+class MyDB extends SQLite3 {
+  function __construct() {
+     $this->open('birthday.db');
+  }
+}
+
+$db = new MyDB();
+if(!$db) {
+  die($db->lastErrorMsg());
 }
 
 ?>

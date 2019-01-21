@@ -4,23 +4,22 @@ include_once("../conf/config.php");
 
 if(isset($_POST['update']))
 {
-    $user_id = mysqli_real_escape_string($mysqli, $_POST['user_id']);
-
-    $name=mysqli_real_escape_string($mysqli, $_POST['name']);
-    $email=mysqli_real_escape_string($mysqli, $_POST['email']);
-    $birthday=mysqli_real_escape_string($mysqli, $_POST['birthday']);
+    $user_id = $_POST['user_id'];
+    $name=$_POST['name'];
+    $email=$_POST['email'];
+    $birthday=$_POST['birthday'];
 
     // checking empty fields
     if(empty($name) || empty($email) || empty($birthday)) {
       echo "<font color='red'>No empty fields allowed.</font><br/>";
     } else {
       //updating the table
-      $result = mysqli_query($mysqli, "UPDATE users SET name='$name',email='$email',birthday='$birthday' WHERE user_id=$user_id");
-      $result = mysqli_query($mysqli, "SELECT config_id FROM users WHERE user_id=$user_id");
-      while($res = mysqli_fetch_array($result))
-      {
+      $result = $db->exec("UPDATE users SET name='$name',email='$email',birthday='$birthday' WHERE user_id=$user_id");
+      $result = $db->query("SELECT config_id FROM users WHERE user_id=$user_id");
+      while($res = $result->fetchArray(SQLITE3_ASSOC)) {
         $config_id = $res['config_id'];
       }
+      $db->close();
       echo 'Save done, redirecting..';
       //redirecting to the display page. In our case, it is index.php
       header("Location: index.php?config_id=".$config_id."");
@@ -29,17 +28,15 @@ if(isset($_POST['update']))
 ?>
 <?php
 //getting user_id from url
-$user_id = mysqli_real_escape_string($mysqli, $_GET['user_id']);
+$user_id = $_GET['user_id'];
 //selecting data associated with this particular user_id
-$result = mysqli_query($mysqli, "SELECT name,email,birthday FROM users WHERE user_id=$user_id");
-
-while($res = mysqli_fetch_array($result))
-{
+$result = $db->query("SELECT name,email,birthday FROM users WHERE user_id=$user_id");
+while($res = $result->fetchArray(SQLITE3_ASSOC)) {
     $name = $res['name'];
     $email = $res['email'];
 	  $birthday = $res['birthday'];
 }
-mysqli_close($mysqli);
+$db->close();
 ?>
 <html>
 <head>

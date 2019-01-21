@@ -4,24 +4,23 @@ include_once("../conf/config.php");
 
 if(isset($_POST['update']))
 {
-    $config_id = mysqli_real_escape_string($mysqli, $_POST['config_id']);
-    $config_name=mysqli_real_escape_string($mysqli, $_POST['config_name']);
-    $from_name=mysqli_real_escape_string($mysqli, $_POST['from_name']);
-    $from_address=mysqli_real_escape_string($mysqli, $_POST['from_address']);
-    $bcc_address=mysqli_real_escape_string($mysqli, $_POST['bcc_address']);
-    $topic=mysqli_real_escape_string($mysqli, $_POST['topic']);
-    $line1=mysqli_real_escape_string($mysqli, $_POST['line1']);
-    $age_line=mysqli_real_escape_string($mysqli, $_POST['age_line']);
-    $noage_line=mysqli_real_escape_string($mysqli, $_POST['noage_line']);
-    $picture_file=mysqli_real_escape_string($mysqli, $_POST['picture_file']);
+    $config_id = $_POST['config_id'];
+    $config_name=$_POST['config_name'];
+    $from_name=$_POST['from_name'];
+    $from_address=$_POST['from_address'];
+    $bcc_address=$_POST['bcc_address'];
+    $topic=$_POST['topic'];
+    $line1=$_POST['line1'];
+    $age_line=$_POST['age_line'];
+    $noage_line=$_POST['noage_line'];
+    $picture_file=$_POST['picture_file'];
 
     // checking empty fields
     if(empty($config_id) || empty($config_name) || empty($from_name) || empty($from_address) || empty($bcc_address) || empty($topic) || empty($line1) || empty($age_line) || empty($noage_line) || empty($picture_file) ) {
         echo "<font color='red'>No empty fields allowed.</font><br/>";
     } else {
         //updating the table
-        $result = mysqli_query($mysqli, "UPDATE config SET config_name='$config_name',from_name='$from_name',from_address='$from_address',bcc_address='$bcc_address',topic='$topic',line1='$line1',age_line='$age_line',noage_line='$noage_line',picture_file='$picture_file' WHERE config_id=$config_id");
-
+        $result = $db->exec("UPDATE config SET config_name='$config_name',from_name='$from_name',from_address='$from_address',bcc_address='$bcc_address',topic='$topic',line1='$line1',age_line='$age_line',noage_line='$noage_line',picture_file='$picture_file' WHERE config_id=$config_id");
 				echo 'Save done, redirecting..';
         //redirecting to the display page. In our case, it is index.php
         header("Location: index.php");
@@ -30,12 +29,12 @@ if(isset($_POST['update']))
 ?>
 <?php
 $config_id = 1;
-if (isset($_GET['config_id'])) $config_id = mysqli_real_escape_string($mysqli, $_GET['config_id']);
+if (isset($_GET['config_id'])) $config_id = $_GET['config_id'];
 
 //selecting data associated with this particular config_id
-$result = mysqli_query($mysqli, "SELECT config_id,config_name,from_name,from_address,bcc_address,topic,line1,age_line,noage_line,picture_file FROM config WHERE config_id=$config_id");
+$result = $db->query("SELECT config_id,config_name,from_name,from_address,bcc_address,topic,line1,age_line,noage_line,picture_file FROM config WHERE config_id=$config_id");
 
-while($res = mysqli_fetch_array($result))
+while($res = $result->fetchArray(SQLITE3_ASSOC))
 {
     $config_name = $res['config_name'];
     $from_name = $res['from_name'];
@@ -103,3 +102,6 @@ while($res = mysqli_fetch_array($result))
     </form>
 </body>
 </html>
+<?php
+$db->close();
+?>

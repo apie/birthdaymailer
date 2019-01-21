@@ -1,16 +1,15 @@
 #!/usr/bin/env python2
-# By D.J. Murray (apie), 2016-10-27
 from email.MIMEMultipart import MIMEMultipart
 from email.MIMEText import MIMEText
 from email.MIMEImage import MIMEImage
-import os
+import os 
 
 def mail_birthday( configuration, user):
     dir_path = os.path.dirname(os.path.realpath(__file__))
     footer = 'Met vriendelijke groet,'
     # Assume birthyear 1900 was used when the age is unknown.
     if user['age'] < 100:
-      #Replace string %age% with age.
+			#Replace string %age% with age.
       line2 = configuration['age_line'].replace('%age%',str(user['age']))
     else:
       line2 = configuration['noage_line']
