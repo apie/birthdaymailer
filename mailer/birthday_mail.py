@@ -6,6 +6,7 @@ import os
 
 def mail_birthday( configuration, user):
     dir_path = os.path.dirname(os.path.realpath(__file__))
+    header = 'Hoi {},'.format(user['name'].split()[0])
     footer = 'Met vriendelijke groet,'
     # Assume birthyear 1900 was used when the age is unknown.
     if user['age'] < 100:
@@ -31,11 +32,11 @@ def mail_birthday( configuration, user):
     msgAlternative = MIMEMultipart('alternative')
     msgRoot.attach(msgAlternative)
 
-    msgText = MIMEText('%s %s \r\n\r\n%s\r\n%s' % (configuration['line1'], line2, footer, configuration['from_name']))
+    msgText = MIMEText('%s\r\n\r\n%s %s \r\n\r\n%s\r\n%s' % (header, configuration['line1'], line2, footer, configuration['from_name']))
     msgAlternative.attach(msgText)
 
     # We reference the image in the IMG SRC attribute by the ID we give it below
-    msgText = MIMEText('<b>%s</b> %s <br><img src="cid:image1"><br><br>%s<br>%s' % (configuration['line1'], line2, footer, configuration['from_name']), 'html')
+    msgText = MIMEText('%s<br><br><b>%s</b> %s <br><img src="cid:image1"><br><br>%s<br>%s' % (header, configuration['line1'], line2, footer, configuration['from_name']), 'html')
     msgAlternative.attach(msgText)
 
     # Attach imagefile
