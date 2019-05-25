@@ -1,7 +1,7 @@
-#!/usr/bin/env python2
-from email.MIMEMultipart import MIMEMultipart
-from email.MIMEText import MIMEText
-from email.MIMEImage import MIMEImage
+#!/usr/bin/env python3
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
+from email.mime.image import MIMEImage
 import os 
 
 def mail_birthday( configuration, user):

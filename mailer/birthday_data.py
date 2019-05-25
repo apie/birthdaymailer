@@ -1,4 +1,4 @@
-#!/usr/bin/env python2
+#!/usr/bin/env python3
 # By D.J. Murray (apie), 2016-10-27
 import sqlite3 as lite
 
