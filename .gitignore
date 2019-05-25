@@ -90,4 +90,5 @@ ENV/
 
 #####
 .htaccess
-mailer/mysql/
+mailer/bmail/
+*.db
