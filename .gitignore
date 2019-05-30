@@ -90,5 +90,7 @@ ENV/
 
 #####
 .htaccess
-mailer/mysql/
+mailer/bmail/
+*.db
 mailer/birthday_settings.py
+
