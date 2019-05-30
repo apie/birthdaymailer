@@ -1,10 +1,11 @@
-#!/usr/bin/env python2
-from email.MIMEMultipart import MIMEMultipart
-from email.MIMEText import MIMEText
-from email.MIMEImage import MIMEImage
+#!/usr/bin/env python3
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
+from email.mime.image import MIMEImage
+from birthday_settings import real_from_address
 import os 
 
-def mail_birthday( configuration, user):
+def mail_birthday(configuration, user):
     dir_path = os.path.dirname(os.path.realpath(__file__))
     header = 'Hoi {},'.format(user['name'].split()[0])
     footer = 'Met vriendelijke groet,'
@@ -17,13 +18,15 @@ def mail_birthday( configuration, user):
     # Send an HTML email with an embedded image and a plain text message for
     # email clients that don't want to display the HTML.
     # Define these once; use them twice!
-    strFrom = '%s <%s>' % (configuration['from_name'], configuration['from_address'])
+    strReplyTo = '%s <%s>' % (configuration['from_name'], configuration['from_address'])
+    strFrom = '%s <%s>' % (configuration['from_name'], real_from_address)
     strTo   = '%s <%s>' % ( user['name'], user['email'] )
 
     # Create the root message and fill in the from, to, and subject headers
     msgRoot = MIMEMultipart('related')
     msgRoot['Subject'] = configuration['topic']
     msgRoot['From'] = strFrom
+    msgRoot['Reply-to'] = strReplyTo
     msgRoot['To'] = strTo
     msgRoot.preamble = 'This is a multi-part message in MIME format.'
 
