@@ -92,3 +92,5 @@ ENV/
 .htaccess
 mailer/mysql/
 mailer/birthday_settings.py
+mailer/files/
+*.db

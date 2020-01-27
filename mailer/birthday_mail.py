@@ -8,7 +8,7 @@ import os
 def mail_birthday(configuration, user):
     dir_path = os.path.dirname(os.path.realpath(__file__))
     header = 'Hoi {},'.format(user['name'].split()[0])
-    footer = 'Met vriendelijke groet,'
+    footer = 'Groetjes,'
     # Assume birthyear 1900 was used when the age is unknown.
     if user['age'] < 100:
 			#Replace string %age% with age.
