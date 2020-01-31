@@ -12,7 +12,7 @@ CREATE TABLE "config" (
 );
 CREATE TABLE `users` (
 	`user_id`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-	`config_id`	integer NOT NULL,
+	`config_id`	integer NOT NULL DEFAULT 1,
 	`name`	varchar(20) NOT NULL,
 	`email`	varchar(40) NOT NULL,
 	`birthday`	date NOT NULL,
